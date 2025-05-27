@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const player3CardCountEl = document.querySelector('#player3-area .card-count');
 
     // Backend URL - confirmed by user
-    const backendBaseUrl = 'http://9525.ip-ddns.com'; 
+    const backendBaseUrl = 'https://9525.ip-ddns.com'; 
     // Assuming the PHP files are directly in doudizhu_backend, and doudizhu_backend is served at the root of backendBaseUrl
     // If doudizhu_backend is a subdirectory visible under backendBaseUrl, then it would be:
     // const apiUrl = `${backendBaseUrl}/doudizhu_backend/api_deal.php`;
