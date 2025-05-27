@@ -18,13 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function createCardElement(card) {
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('card-placeholder'); // Use existing styling for now
-        // card.displayName is like "♠A", "♥K", "大鬼" from PHP Card class
-        cardDiv.textContent = card.displayName; 
-        // Later, we can add logic here to use card.imageFilename to show an <img>
-        // For now, this text representation helps verify data flow.
-        return cardDiv;
+        const cardImg = document.createElement('img');
+        cardImg.classList.add('card-image'); // New class for styling images
+        cardImg.src = `images/${card.imageFilename}`; // Assuming images are in doudizhu/images/
+        cardImg.alt = card.displayName;
+        cardImg.title = card.displayName; // Tooltip for hover
+        
+        // You might want to store card data directly on the element for later use
+        // e.g., cardImg.dataset.suit = card.suit;
+        //       cardImg.dataset.rank = card.rank;
+        //       cardImg.dataset.value = card.value;
+        // For now, keeping it simple. The `card` object itself is available when adding listeners.
+        return cardImg;
     }
 
     function updatePlayerHand(handElement, cardCountElement, cards) {
@@ -34,8 +39,25 @@ document.addEventListener('DOMContentLoaded', () => {
         handElement.innerHTML = ''; 
         
         if (Array.isArray(cards)) {
-            cards.forEach(card => {
-                handElement.appendChild(createCardElement(card));
+            cards.forEach(cardData => { // Renamed 'card' to 'cardData' for clarity
+                const cardElement = createCardElement(cardData);
+                
+                // Store card data on the element for easy access
+                cardElement.dataset.suit = cardData.suit;
+                cardElement.dataset.rank = cardData.rank;
+                cardElement.dataset.value = cardData.value;
+                cardElement.dataset.displayName = cardData.displayName;
+                cardElement.dataset.imageFilename = cardData.imageFilename;
+
+                // Add click listener for selection
+                // Only allow selection for cards in actual hand areas, not landlord area etc.
+                if (handElement.classList.contains('hand-area')) { // Check if it's a player's hand
+                    cardElement.addEventListener('click', () => {
+                        cardElement.classList.toggle('selected');
+                        console.log(`Card ${cardData.displayName} selection toggled. Selected: ${cardElement.classList.contains('selected')}`);
+                    });
+                }
+                handElement.appendChild(cardElement);
             });
             cardCountElement.textContent = `${cards.length} 张`; // "X cards"
         } else {
@@ -91,11 +113,92 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Dou Dizhu frontend script loaded.');
     fetchAndDisplayInitialDeal();
 
-    // Basic button functionality (logging to console for now)
-    const buttons = document.querySelectorAll('#player-actions button');
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            console.log(`${button.textContent.trim()} button clicked. Functionality not implemented yet.`);
+    // --- Player Action Button Listeners ---
+    const playButton = document.getElementById('btn-play');
+    const passButton = document.getElementById('btn-pass');
+    const bidButton = document.getElementById('btn-bid'); // Assuming #btn-bid exists
+    const hintButton = document.getElementById('btn-hint'); // Assuming #btn-hint exists
+
+    if (playButton) {
+        playButton.addEventListener('click', () => {
+            console.log('Play button clicked');
+            
+            // For now, assume Player 1 is the active player
+            // Later, this needs to be dynamic based on actual game turn
+            const activePlayerHandEl = player1HandEl; 
+            const activePlayerCardCountEl = player1CardCountEl;
+            
+            if (!activePlayerHandEl) {
+                console.error('Active player hand element not found.');
+                return;
+            }
+
+            const selectedCardsElements = activePlayerHandEl.querySelectorAll('.card-image.selected');
+            
+            if (selectedCardsElements.length === 0) {
+                console.log('No cards selected to play.');
+                // Optionally, provide user feedback (e.g., alert or message on UI)
+                // alert('请先选择要出的牌！(Please select cards to play!)');
+                return;
+            }
+
+            const playedCardsData = [];
+            selectedCardsElements.forEach(cardEl => {
+                playedCardsData.push({
+                    displayName: cardEl.dataset.displayName,
+                    suit: cardEl.dataset.suit,
+                    rank: cardEl.dataset.rank,
+                    value: cardEl.dataset.value,
+                    imageFilename: cardEl.dataset.imageFilename
+                });
+            });
+
+            console.log('Selected cards to play:', playedCardsData);
+
+            // Move cards to common played area
+            const commonPlayedAreaEl = document.getElementById('common-played-area');
+            if (commonPlayedAreaEl) {
+                // Clear previous cards in played area (or decide on accumulation later)
+                // For now, let's clear it to show only the latest play
+                const playedAreaLabel = commonPlayedAreaEl.querySelector('.area-label');
+                commonPlayedAreaEl.innerHTML = ''; // Clear previous
+                if (playedAreaLabel) commonPlayedAreaEl.appendChild(playedAreaLabel); // Add label back
+
+
+                selectedCardsElements.forEach(cardEl => {
+                    cardEl.classList.remove('selected'); // Unselect before moving
+                    commonPlayedAreaEl.appendChild(cardEl); // Move the element
+                });
+            }
+
+            // Update card count for the player
+            if (activePlayerCardCountEl && activePlayerHandEl) {
+                const remainingCards = activePlayerHandEl.querySelectorAll('.card-image').length;
+                activePlayerCardCountEl.textContent = `${remainingCards} 张`;
+            }
+            
+            console.log('Cards played (client-side only).');
         });
-    });
+    }
+
+    if (passButton) {
+        passButton.addEventListener('click', () => {
+            console.log('Pass button clicked. Functionality not implemented yet.');
+            // alert('Pass! (功能待实现 - Functionality to be implemented)');
+        });
+    }
+
+    if (bidButton) {
+        bidButton.addEventListener('click', () => {
+            console.log('Bid button clicked. Functionality not implemented yet.');
+            // alert('Bid! (功能待实现 - Functionality to be implemented)');
+        });
+    }
+    
+    if (hintButton) {
+        hintButton.addEventListener('click', () => {
+            console.log('Hint button clicked. Functionality not implemented yet.');
+            // alert('Hint! (功能待实现 - Functionality to be implemented)');
+        });
+    }
 });

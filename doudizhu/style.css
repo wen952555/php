@@ -81,10 +81,10 @@ body {
 
 .card-area { /* General styling for areas that will contain cards */
     display: flex;
-    flex-wrap: wrap; /* Allow cards to wrap */
-    gap: 5px; /* Spacing between cards */
-    align-items: center; /* Align items vertically */
-    min-height: 50px; /* Minimum height for visibility */
+    flex-wrap: wrap; 
+    gap: 8px; /* Increased gap for better visual separation of images */
+    align-items: flex-start; /* Align cards to the top of the area */
+    min-height: 110px; /* Adjust to fit card height + padding */
 }
 
 .area-label {
@@ -94,6 +94,7 @@ body {
 }
 
 /* Placeholder for individual cards - will be created by JS */
+/*
 .card-placeholder {
     width: 40px;
     height: 60px;
@@ -105,6 +106,24 @@ body {
     align-items: center;
     font-size: 0.7em;
     color: #333;
+}
+*/
+
+.card-image {
+    width: 70px;  /* Adjust as needed for your card image aspect ratio */
+    height: 100px; /* Adjust as needed for your card image aspect ratio */
+    border: 1px solid #999;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    object-fit: contain; /* Or 'cover', depending on image aspect and desired look */
+    background-color: #fff; /* Fallback if images are transparent or fail to load */
+}
+
+.card-image.selected {
+    transform: translateY(-10px); /* Move selected card up */
+    box-shadow: 0px 0px 8px 3px #007bff; /* Blue glow for selected card */
+    /* You can also change border or add other indicators */
+    /* Ensure this doesn't mess with layout too much, or adjust container padding if needed */
 }
 
 #player-actions {
@@ -148,7 +167,9 @@ body {
 /* Specific styling for hand areas if needed */
 .hand-area {
     background-color: #e8f6e8; /* Light green background for hand areas */
-    padding: 8px;
+    padding: 10px; /* Increased padding */
     border-radius: 4px;
-    min-height: 70px; /* Ensure visibility for card placeholders */
+    min-height: 120px; /* Adjust to fit card height + padding */
+    /* For overlapping cards, more complex CSS might be needed later, like negative margins */
+    /* display: flex; by default from .card-area */
 }
