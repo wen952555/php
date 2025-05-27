@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (handElement.classList.contains('hand-area')) { // Check if it's a player's hand
                     cardElement.addEventListener('click', () => {
                         cardElement.classList.toggle('selected');
-                        console.log(`Card ${cardData.displayName} selection toggled. Selected: ${cardElement.classList.contains('selected')}`);
+                        console.log(`牌 ${cardData.displayName} 选择状态切换. 选中: ${cardElement.classList.contains('selected')}`);
                     });
                 }
                 handElement.appendChild(cardElement);
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchAndDisplayInitialDeal() {
-        console.log(`Fetching initial deal from: ${apiUrl}`);
+        console.log(`从后端获取初始发牌: ${apiUrl}`);
         try {
             const response = await fetch(apiUrl);
             if (!response.ok) {
@@ -90,19 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.success && result.data) {
-                console.log('Deal data received:', result.data);
+                console.log('收到发牌数据:', result.data);
                 updatePlayerHand(player1HandEl, player1CardCountEl, result.data.player1Hand);
                 updatePlayerHand(player2HandEl, player2CardCountEl, result.data.player2Hand);
                 updatePlayerHand(player3HandEl, player3CardCountEl, result.data.player3Hand);
                 updateLandlordCards(landlordCardsAreaEl, result.data.landlordCards);
-                console.log('Frontend updated with dealt card data.');
+                console.log('前端已更新所发牌数据。');
             } else {
-                throw new Error(result.message || 'Failed to get valid deal data from backend.');
+                throw new Error(result.message || '从后端获取有效发牌数据失败。');
             }
         } catch (error) {
-            console.error('Error fetching or displaying initial deal:', error);
+            console.error('获取或显示初始发牌时出错:', error);
             // Display error to user?
-            if (player1HandEl) player1HandEl.textContent = `Error loading cards: ${error.message}`;
+            if (player1HandEl) player1HandEl.textContent = `加载牌时出错: ${error.message}`;
             if (player1CardCountEl) player1CardCountEl.textContent = 'Error';
             if (player2CardCountEl) player2CardCountEl.textContent = 'Error';
             if (player3CardCountEl) player3CardCountEl.textContent = 'Error';
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial setup
-    console.log('Dou Dizhu frontend script loaded.');
+    console.log('斗地主前端脚本已加载。');
     fetchAndDisplayInitialDeal();
 
     // --- Player Action Button Listeners ---
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (playButton) {
         playButton.addEventListener('click', () => {
-            console.log('Play button clicked');
+            console.log('出牌按钮点击');
             
             // For now, assume Player 1 is the active player
             // Later, this needs to be dynamic based on actual game turn
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedCardsElements = activePlayerHandEl.querySelectorAll('.card-image.selected');
             
             if (selectedCardsElements.length === 0) {
-                console.log('No cards selected to play.');
+                console.log('没有选中的牌可以出。');
                 // Optionally, provide user feedback (e.g., alert or message on UI)
                 // alert('请先选择要出的牌！(Please select cards to play!)');
                 return;
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            console.log('Selected cards to play:', playedCardsData);
+            console.log('选中的牌:', playedCardsData);
 
             // Move cards to common played area
             const commonPlayedAreaEl = document.getElementById('common-played-area');
@@ -177,27 +177,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 activePlayerCardCountEl.textContent = `${remainingCards} 张`;
             }
             
-            console.log('Cards played (client-side only).');
+            console.log('出牌成功 (仅前端操作)。');
         });
     }
 
     if (passButton) {
         passButton.addEventListener('click', () => {
-            console.log('Pass button clicked. Functionality not implemented yet.');
+            console.log('不要按钮点击。功能待实现。');
             // alert('Pass! (功能待实现 - Functionality to be implemented)');
         });
     }
 
     if (bidButton) {
         bidButton.addEventListener('click', () => {
-            console.log('Bid button clicked. Functionality not implemented yet.');
+            console.log('叫地主按钮点击。功能待实现。');
             // alert('Bid! (功能待实现 - Functionality to be implemented)');
         });
     }
     
     if (hintButton) {
         hintButton.addEventListener('click', () => {
-            console.log('Hint button clicked. Functionality not implemented yet.');
+            console.log('提示按钮点击。功能待实现。');
             // alert('Hint! (功能待实现 - Functionality to be implemented)');
         });
     }
