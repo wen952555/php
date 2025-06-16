@@ -777,15 +777,17 @@
                 cardsContainer.innerHTML = '';
                 
                 if (player.isHuman && gameState.gameStatus === 'playing') {
-                    // 显示人类玩家的牌面
+                    // 显示人类玩家的牌面 - 使用本地图片
                     player.cards.forEach(card => {
                         const cardElement = document.createElement('div');
                         cardElement.className = 'card';
                         if (gameState.selectedCards.includes(card.id)) {
                             cardElement.classList.add('selected');
                         }
-                        // 使用Wikimedia Commons的扑克牌图片
-                        cardElement.style.backgroundImage = `url(https://upload.wikimedia.org/wikipedia/commons/thumb/${card.filename.substring(0, 1)}/${card.filename}/200px-${card.filename})`;
+                        
+                        // 使用本地图片文件夹中的图片 - 修改在这里！！！
+                        cardElement.style.backgroundImage = `url(images/${card.filename})`;
+                        
                         cardElement.dataset.id = card.id;
                         cardElement.addEventListener('click', () => toggleCardSelection(card.id));
                         cardsContainer.appendChild(cardElement);
