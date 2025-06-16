@@ -18,7 +18,7 @@
             background: linear-gradient(135deg, #1a2a6c, #2a4d69, #4b86b4);
             color: #fff;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -185,6 +185,7 @@
             justify-content: center;
             gap: 5px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
         
         /* ===== 扑克牌样式 ===== */
@@ -192,7 +193,6 @@
             width: 80px;
             height: 120px;
             border-radius: 8px;
-            background: #f0f0f0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -511,11 +511,7 @@
                     <div class="player-status">请分牌</div>
                 </div>
                 <div class="player-cards">
-                    <div class="card" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/9b/10_of_clubs.svg');"></div>
-                    <div class="card" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/25/Ace_of_spades.svg');"></div>
-                    <div class="card" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/db/King_of_diamonds.svg');"></div>
-                    <div class="card" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/42/Queen_of_hearts.svg');"></div>
-                    <div class="card" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/9/94/Jack_of_spades.svg');"></div>
+                    <!-- 玩家牌会由JS动态生成 -->
                 </div>
             </div>
         </div>
@@ -545,34 +541,7 @@
         <div class="modal-content">
             <h2 class="modal-title">游戏结果</h2>
             <ul class="result-list" id="resultList">
-                <li class="result-item winner">
-                    <div class="player-result">
-                        <div class="player-icon">1</div>
-                        <div class="player-name-result">玩家</div>
-                    </div>
-                    <div class="player-score">28分</div>
-                </li>
-                <li class="result-item">
-                    <div class="player-result">
-                        <div class="player-icon">2</div>
-                        <div class="player-name-result">AI玩家1</div>
-                    </div>
-                    <div class="player-score">22分</div>
-                </li>
-                <li class="result-item">
-                    <div class="player-result">
-                        <div class="player-icon">3</div>
-                        <div class="player-name-result">AI玩家2</div>
-                    </div>
-                    <div class="player-score">18分</div>
-                </li>
-                <li class="result-item">
-                    <div class="player-result">
-                        <div class="player-icon">4</div>
-                        <div class="player-name-result">AI玩家3</div>
-                    </div>
-                    <div class="player-score">15分</div>
-                </li>
+                <!-- 结果会由JS动态生成 -->
             </ul>
             <button class="btn pulse" id="playAgainBtn">
                 <i class="fas fa-play"></i> 再玩一次
@@ -604,8 +573,15 @@
             { id: 2, suit: 'spades', rank: 'A', filename: 'ace_of_spades.svg' },
             { id: 3, suit: 'diamonds', rank: 'K', filename: 'king_of_diamonds.svg' },
             { id: 4, suit: 'hearts', rank: 'Q', filename: 'queen_of_hearts.svg' },
-            { id: 5, suit: 'spades', rank: 'J', filename: 'jack_of_spades.svg' }
-            // 实际项目中应包含完整的52张牌
+            { id: 5, suit: 'spades', rank: 'J', filename: 'jack_of_spades.svg' },
+            { id: 6, suit: 'hearts', rank: '10', filename: '10_of_hearts.svg' },
+            { id: 7, suit: 'diamonds', rank: '9', filename: '9_of_diamonds.svg' },
+            { id: 8, suit: 'clubs', rank: '8', filename: '8_of_clubs.svg' },
+            { id: 9, suit: 'spades', rank: '7', filename: '7_of_spades.svg' },
+            { id: 10, suit: 'hearts', rank: '6', filename: '6_of_hearts.svg' },
+            { id: 11, suit: 'diamonds', rank: '5', filename: '5_of_diamonds.svg' },
+            { id: 12, suit: 'clubs', rank: '4', filename: '4_of_clubs.svg' },
+            { id: 13, suit: 'spades', rank: '3', filename: '3_of_spades.svg' }
         ];
         
         // ===========================================
@@ -741,6 +717,10 @@
                     }
                 }
             });
+            
+            // 更新玩家状态
+            document.querySelector('.player-area.bottom .player-status').textContent = 
+                gameState.gameStatus === 'playing' ? "请分牌" : "已完成分牌";
         }
         
         // 切换卡片选择状态
